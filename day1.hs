@@ -8,7 +8,7 @@ part1 = do
 part2 :: IO ()
 part2 = do
   doc <- readFile "day1data"
-  print $ numFromDocument $ r doc
+  print $ numFromDocument $ replaceWords doc
 
 replacements = [("one", "1"),
   ("two", "2"),
@@ -20,24 +20,17 @@ replacements = [("one", "1"),
   ("eight", "8"),
   ("nine", "9")]
 
-r :: String -> String
-r [] = []
-r s = [head s'] ++ (r $ drop 1 s')
-  where s' = replaceDigits s
+replaceWords :: String -> String
+replaceWords [] = []
+replaceWords s = [head s'] ++ (replaceWords $ drop 1 s')
+  where s' = replaceStartIfMatch replacements s
 
-replaceDigits = replace replacements
-
-replace :: [(String, String)] -> String -> String
-replace [] s = s
-replace _ [] = []
-replace ((needle, repl):rest) s = case replace' needle repl s of
-  Just s' -> s'
-  Nothing -> replace rest s
-
-replace' :: String -> String -> String -> Maybe String
-replace' needle replacement haystack = if take len haystack == needle
-  then Just $ replacement ++ drop len haystack
-  else Nothing
+replaceStartIfMatch :: [(String, String)] -> String -> String
+replaceStartIfMatch [] s = s
+replaceStartIfMatch _ [] = []
+replaceStartIfMatch ((needle, repl):rest) haystack = if take len haystack == needle
+  then repl ++ drop len haystack
+  else replaceStartIfMatch rest haystack
     where len = length needle
 
 digitFrom :: ([Char] -> Char) ->  String -> Int
