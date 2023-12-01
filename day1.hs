@@ -34,7 +34,10 @@ replaceStartIfMatch ((needle, repl):rest) haystack = if take len haystack == nee
     where len = length needle
 
 digitFrom :: ([Char] -> Char) ->  String -> Int
-digitFrom from str = read $ [from (filter isDigit str)]
+digitFrom from str = if length digits == 0
+  then 0
+  else read $ [from digits]
+    where digits = filter isDigit str
 
 numFromLine :: String -> Int
 numFromLine str = (digitFrom head str) * 10 + (digitFrom last str)
