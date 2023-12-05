@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void print(long a) {
-    printf("%ld\n", a);
+    printf("%lu\n", a);
 }
 
 long load_file() {
@@ -24,4 +24,8 @@ long load_file() {
     printf("%s\n", buffer);
 
     return (long)buffer;
+}
+
+void print_divider() {
+    printf("------------------\n");
 }
