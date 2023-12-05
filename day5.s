@@ -148,9 +148,6 @@ __transformationLoop:
   cmp rax, qword [rbp - 248]
   jl __d
 
-
-  mov rdx, qword [rbp - 264]
-  mov rax, qword [rdx]
   mov rbx, qword [rbp - 256]
   add rbx, qword [rbp - 248]
   sub rbx, 1
@@ -163,8 +160,6 @@ __transformationLoop:
   mov rbx, qword [rbp - 240]
   sub rbx, qword [rbp - 248]
 
-  mov rdx, qword [rbp - 264]
-  mov rax, qword [rdx]
   add rax, rbx
 
   ; write new seed
