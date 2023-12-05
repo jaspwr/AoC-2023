@@ -89,6 +89,7 @@ __transformationLoop:
   ; range
   mov qword [rbp - 256], 0
 
+  mov qword [rbp - 300], 0
 
   ; parse origin base
   mov rax, qword [rbp - 8]
@@ -98,9 +99,10 @@ __transformationLoop:
   je __breakTransformationLoop
 
   mov qword [rbp - 8], rax
-  mov rcx, rax
+  mov qword [rbp - 300], rax
 
   call parseNum
+  mov rcx, qword [rbp - 300]
   add rcx, rbx
   mov qword [rbp - 8], rcx
   mov qword [rbp - 240], rax
@@ -109,9 +111,10 @@ __transformationLoop:
   mov rax, qword [rbp - 8]
   call skipNonDigit
   mov qword [rbp - 8], rax
-  mov rcx, rax
+  mov qword [rbp - 300], rax
 
   call parseNum
+  mov rcx, qword [rbp - 300]
   add rcx, rbx
   mov qword [rbp - 8], rcx
   mov qword [rbp - 248], rax
@@ -120,9 +123,10 @@ __transformationLoop:
   mov rax, qword [rbp - 8]
   call skipNonDigit
   mov qword [rbp - 8], rax
-  mov rcx, rax
+  mov qword [rbp - 300], rax
 
   call parseNum
+  mov rcx, qword [rbp - 300]
   add rcx, rbx
   mov qword [rbp - 8], rcx
   mov qword [rbp - 256], rax
