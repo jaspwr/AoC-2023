@@ -89,8 +89,6 @@ __transformationLoop:
   ; range
   mov qword [rbp - 256], 0
 
-  mov qword [rbp - 300], 0
-
   ; parse origin base
   mov rax, qword [rbp - 8]
   call skipNonDigit
@@ -99,10 +97,9 @@ __transformationLoop:
   je __breakTransformationLoop
 
   mov qword [rbp - 8], rax
-  mov qword [rbp - 300], rax
 
   call parseNum
-  mov rcx, qword [rbp - 300]
+  mov rcx, qword [rbp - 8]
   add rcx, rbx
   mov qword [rbp - 8], rcx
   mov qword [rbp - 240], rax
@@ -111,10 +108,9 @@ __transformationLoop:
   mov rax, qword [rbp - 8]
   call skipNonDigit
   mov qword [rbp - 8], rax
-  mov qword [rbp - 300], rax
 
   call parseNum
-  mov rcx, qword [rbp - 300]
+  mov rcx, qword [rbp - 8]
   add rcx, rbx
   mov qword [rbp - 8], rcx
   mov qword [rbp - 248], rax
@@ -123,20 +119,12 @@ __transformationLoop:
   mov rax, qword [rbp - 8]
   call skipNonDigit
   mov qword [rbp - 8], rax
-  mov qword [rbp - 300], rax
 
   call parseNum
-  mov rcx, qword [rbp - 300]
+  mov rcx, qword [rbp - 8]
   add rcx, rbx
   mov qword [rbp - 8], rcx
   mov qword [rbp - 256], rax
-
-  ; mov rdi, qword [rbp - 240]
-  ; call print
-  ; mov rdi, qword [rbp - 248]
-  ; call print
-  ; mov rdi, qword [rbp - 256]
-  ; call print
 
   ; apply transformations to current seed
   mov rdx, qword [rbp - 264]
@@ -173,7 +161,7 @@ __transformationLoop:
   ; down to the next section
 
   mov rax, qword [rbp - 8]
-  call findEmptyLineOrEOF
+  call findColonOrEOF
   mov qword [rbp - 8], rax
 
 
@@ -199,13 +187,13 @@ __breakTransformationLoop:
   ; smallest
   mov qword [rbp - 288], 9999999999999
 
-__printLoop:
+__minLoop:
   mov rax, qword [rbp - 16]
   sub rax, 1
   mov qword [rbp - 16], rax
 
   cmp rax, -1
-  je __printBreak
+  je __minBreak
 
   imul rax, 8
   lea rbx, qword [rbp - 24]
@@ -221,8 +209,8 @@ __g:
   mov rdi, qword [rbx]
   call print
 
-  jmp __printLoop
-__printBreak:
+  jmp __minLoop
+__minBreak:
 
 
   call print_divider
@@ -253,7 +241,7 @@ __a:
 __nonDigSkipBreak:
   ret
 
-findEmptyLineOrEOF:
+findColonOrEOF:
   ; takes string pointer rax and increments until empty line or EOF
   __emptyLineLoop:
   cmp byte [rax], 0
@@ -288,9 +276,9 @@ __parseLoop:
 
   ; see if string pointer pointing to a digit.
   mov rax, qword [rbp - 8]
-  cmp byte [rax], 48
+  cmp byte [rax], '0'
   jl __parseBreak
-  cmp byte [rax], 57
+  cmp byte [rax], '9'
   jg __parseBreak
 
   ; load num buffer and * 10
@@ -300,7 +288,7 @@ __parseLoop:
   ; add next number in string
   mov rcx, qword [rbp - 8]
   movzx rbx, byte [rcx]
-  sub rbx, 48
+  sub rbx, '0'
   add rax, rbx
 
   ; store num again
